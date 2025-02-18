@@ -19,7 +19,7 @@ def create(db: Session, schema: check.CreateCheck) -> checks.Check:
     for item in schema.check_items:
         db.add(checks.Item(**item.model_dump(), check_id=new_check.id))
     db.commit()
-    db.refresh(new_check)  # TODO: check if mandatory
+    db.refresh(new_check)
     return new_check
 
 
