@@ -20,7 +20,7 @@ lint: ## lint
 		yamllint .
 
 sec: ## runs security tests
-	docker compose run --rm check-app-test-base bandit .
+	docker compose run --rm check-app-test-base bandit -r .
 
 test: ## test
 	docker compose run --rm check-app-test

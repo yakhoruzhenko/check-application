@@ -5,7 +5,10 @@ from fastapi_pagination import add_pagination
 
 from app.controllers import admin, authentication, checks, users
 
-app = FastAPI(title='Checkbox Application', version=os.getenv('APP_VERSION', '0.1.0'))
+ENVIRONMENT = os.getenv('ENVIRONMENT', 'dev').lower()
+
+app = FastAPI(title='Checkbox Application', version=os.getenv('APP_VERSION', '0.1.0'),
+              docs_url='/docs' if ENVIRONMENT == 'dev' else None)
 add_pagination(app)
 
 
@@ -18,6 +21,8 @@ async def health() -> dict[str, str]:
 
 
 app.include_router(authentication.router)
-app.include_router(admin.router)
+# No admin role is properly implemented atm, so the provided panel exists only for the testing purpose
+if ENVIRONMENT == 'dev':
+    app.include_router(admin.router)
 app.include_router(users.router)
 app.include_router(checks.router)

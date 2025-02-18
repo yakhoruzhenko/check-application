@@ -5,4 +5,6 @@ Welcome to Check Applications's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   overview
+   local_dev
    erd

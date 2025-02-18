@@ -23,14 +23,11 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
-
       - name: Build Test Check App
         run: docker compose build check-app-test-base
-
       - name: Run Linting
         run: |
           docker compose run --rm check-app-test-base sh -c "flake8 . && isort --check --diff . && mypy . && yamllint ."
-
       - name: Run Security Analysis
         run: |
           docker compose run --rm check-app-test-base bandit -r .

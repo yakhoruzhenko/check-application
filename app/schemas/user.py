@@ -23,9 +23,9 @@ class ResetUserPassword(ResetUserPasswordRequest):
 
 class UserResponse(BaseModel):
     id: UUID
-    name: str
-    login: str
-    email: str
+    name: str = Field(example='Tester')
+    login: str = Field(example='test')
+    email: str = Field(example='test@mail.com')
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)

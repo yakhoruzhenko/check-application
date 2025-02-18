@@ -17,8 +17,7 @@ services:
     environment:
       ENVIRONMENT: dev
     volumes:
-      - ${PWD}/app:/app/app
-      - ${PWD}/tests:/app/tests
+      - ${PWD}/:/app/
     command: ["echo", "I only exist to be extended so I'll just exit, thanks"]
 
   check-app:
@@ -33,15 +32,21 @@ services:
       postgres:
         condition: service_healthy
     environment:
-      APP_VERSION: "0.1.1"
+      # App config
+      APP_VERSION: "0.2.0"
       ENVIRONMENT: dev
+      # Security
       ADMIN_TOKEN: test1234
+      CHECK_LINE_LENGTH: 40  # Maximum number of characters per line in the text representation of a check
+      SECRET_KEY: 'fcb83a311c0ab22310e16417b84de96d496c5f80906b4e14c00b15de44f56a8c'
+      ACCESS_TOKEN_EXPIRE_MINUTES: 1440  # 24 hours
+      HASHING_ALGOTRITHM: 'HS256'
+      # DB connectivity
       PGHOST: postgres
       PGPORT: 5432
       PGDATABASE: check_app
       PGUSER: check
       PGPASSWORD: password
-      LINE_LENGTH: 40
     entrypoint: ["/app/entrypoint.sh"]
     command:
       [

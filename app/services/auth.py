@@ -20,7 +20,7 @@ SECRET_KEY = os.getenv('SECRET_KEY',
                        'fcb83a311c0ab22310e16417b84de96d496c5f80906b4e14c00b15de44f56a8c')
 ADMIN_TOKEN = os.getenv('ADMIN_TOKEN', 'fake_token')
 ALGORITHM = os.getenv('HASHING_ALGOTRITHM', 'HS256')
-ACCESS_TOKEN_EXPIRE_MINUTES = os.getenv('ACCESS_TOKEN_EXPIRE', 30)
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv('ACCESS_TOKEN_EXPIRE', 30))
 
 
 def create_access_token(data: dict[str, Any]) -> str:
