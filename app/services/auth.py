@@ -47,8 +47,8 @@ def get_current_user(token: str = Depends(oauth2_scheme),
     return get_by_id(id=user_id, db=db)
 
 
-def admin_token(token: str = Header()) -> None:
-    if token != ADMIN_TOKEN:
+def admin_token(x_admin_token: str = Header()) -> None:  # pragma: no cover
+    if x_admin_token != ADMIN_TOKEN:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail='Invalid admin token',

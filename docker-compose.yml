@@ -15,7 +15,7 @@ services:
       dockerfile: Dockerfile.dev
     container_name: check-app-base
     environment:
-      ENVIRONMENT: dev
+      ENVIRONMENT: "dev"
     volumes:
       - ${PWD}/:/app/
     command: ["echo", "I only exist to be extended so I'll just exit, thanks"]
@@ -33,20 +33,20 @@ services:
         condition: service_healthy
     environment:
       # App config
-      APP_VERSION: "0.2.0"
-      ENVIRONMENT: dev
+      APP_VERSION: "0.2.1"
+      ENVIRONMENT: "dev"
       # Security
-      ADMIN_TOKEN: test1234
+      ADMIN_TOKEN: "test1234"
       CHECK_LINE_LENGTH: 40  # Maximum number of characters per line in the text representation of a check
-      SECRET_KEY: 'fcb83a311c0ab22310e16417b84de96d496c5f80906b4e14c00b15de44f56a8c'
+      SECRET_KEY: "fcb83a311c0ab22310e16417b84de96d496c5f80906b4e14c00b15de44f56a8c"
       ACCESS_TOKEN_EXPIRE_MINUTES: 1440  # 24 hours
-      HASHING_ALGOTRITHM: 'HS256'
+      HASHING_ALGOTRITHM: "HS256"
       # DB connectivity
-      PGHOST: postgres
+      PGHOST: "postgres"
       PGPORT: 5432
-      PGDATABASE: check_app
-      PGUSER: check
-      PGPASSWORD: password
+      PGDATABASE: "check_app"
+      PGUSER: "check"
+      PGPASSWORD: "password"
     entrypoint: ["/app/entrypoint.sh"]
     command:
       [
@@ -89,20 +89,20 @@ services:
     depends_on:
       - postgres-test
     environment:
-      PGHOST: postgres-test
+      PGHOST: "postgres-test"
       PGPORT: 5432
-      PGDATABASE: check_app_test
-      PGUSER: check
-      PGPASSWORD: password
+      PGDATABASE: "check_app_test"
+      PGUSER: "check"
+      PGPASSWORD: "password"
     command: sh -c "coverage run -m pytest --cov=app"
 
   postgres:
     container_name: postgres
     image: postgres:14
     environment:
-      POSTGRES_DB: check_app
-      POSTGRES_USER: check
-      POSTGRES_PASSWORD: password
+      POSTGRES_DB: "check_app"
+      POSTGRES_USER: "check"
+      POSTGRES_PASSWORD: "password"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U user -d mydb"]
       interval: 5s
@@ -110,17 +110,17 @@ services:
       start_period: 10s
       timeout: 3s
     ports:
-      - "5788:5432"
+      - 5788:5432
 
   postgres-test:
     container_name: postgres-test
     image: postgres:14
     environment:
-      POSTGRES_DB: check_app_test
-      POSTGRES_USER: check
-      POSTGRES_PASSWORD: password
+      POSTGRES_DB: "check_app_test"
+      POSTGRES_USER: "check"
+      POSTGRES_PASSWORD: "password"
     ports:
-      - "5789:5432"
+      - 5789:5432
 
   check-app-erd:
     extends: check-app-base
@@ -132,11 +132,11 @@ services:
     depends_on:
       - postgres-test
     environment:
-      PGHOST: postgres-test
+      PGHOST: "postgres-test"
       PGPORT: 5432
-      PGDATABASE: check_app_test
-      PGUSER: check
-      PGPASSWORD: password
+      PGDATABASE: "check_app_test"
+      PGUSER: "check"
+      PGPASSWORD: "password"
     command: >
       sh -c "
         if ! apt list --installed | grep -q graphviz; then

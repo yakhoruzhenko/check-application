@@ -52,7 +52,47 @@ You can seed the local database with dummy data using the following command.
 
    make seed  
 
-This command starts the application in detached mode and runs a script inside the container to populate the database with test data.
+This command starts the application in detached mode and runs a script inside the container to populate the database with test data. This dummy data can be used to generate a text representation of the `check` entity along with its related items.
+
+Example of generated text:
+
+.. code-block:: html
+
+          Weather-resistant Handmade Smart
+                  Products 511 Co.
+      ========================================
+      3.00 x 75.36
+      Compact Top-tier
+      Professional Hygienic Modern
+      Advanced Vintage Item             226.08
+      ----------------------------------------
+      3.00 x 10.92
+      All-season Handmade
+      Sustainable Anti-slip
+      Affordable Item                    32.76
+      ----------------------------------------
+      1.00 x 51.72
+      Classic High-quality
+      Customizable Professional
+      Exclusive Sustainable Vegan
+      Item                               51.72
+      ----------------------------------------
+      1.00 x 24.93
+      Stackable Colorful Classic
+      Recyclable Eco-friendly
+      Fast-charging Heavy-duty
+      Compact Custom Item                24.93
+      ----------------------------------------
+      4.00 x 11.77
+      Heavy-duty Trendy High-
+      performance Item                   47.08
+      ========================================
+      TOTAL                             382.57
+      Cash                              446.49
+      Change                             63.92
+      ========================================
+                  05.03.2025 06:30
+            Thank you for your purchase!
 
 Shut Down Services
 ------------------
