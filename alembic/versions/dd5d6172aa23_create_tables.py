@@ -30,7 +30,7 @@ def upgrade():
     )
     op.create_table('checks',
     sa.Column('creator_id', sa.Uuid(), nullable=False),
-    sa.Column('payment_method', sa.Enum('CASH', 'CREDIT_CARD', name='paymentmethod'), nullable=False),
+    sa.Column('payment_method', sa.Enum('CASH', 'CREDIT_CARD', name='payment_method_enum'), nullable=False),
     sa.Column('paid_amount', sa.DECIMAL(precision=10, scale=2), nullable=False),
     sa.Column('total_amount', sa.DECIMAL(precision=10, scale=2), nullable=False),
     sa.Column('change', sa.DECIMAL(precision=10, scale=2), nullable=False),
@@ -59,5 +59,6 @@ def downgrade():
     op.drop_table('items')
     op.drop_table('checks')
     op.drop_table('users')
+    op.execute('DROP TYPE payment_method_enum')
     op.execute('DROP EXTENSION IF EXISTS "uuid-ossp";')
     # ### end Alembic commands ###

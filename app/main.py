@@ -7,13 +7,13 @@ from app.controllers import admin, authentication, checks, users
 
 ENVIRONMENT = os.getenv('ENVIRONMENT', 'dev').lower()
 
-app = FastAPI(title='Checkbox Application', version=os.getenv('APP_VERSION', '0.1.0'),
+app = FastAPI(title='Check Application', version=os.getenv('APP_VERSION', '0.1.0'),
               docs_url='/docs' if ENVIRONMENT == 'dev' else None)
 add_pagination(app)
 
 
 @app.get('/health', include_in_schema=False)
-async def health() -> dict[str, str]:
+async def health() -> dict[str, str]:  # pragma: no cover
     '''
     Basic health check implementation
     '''
@@ -22,7 +22,7 @@ async def health() -> dict[str, str]:
 
 app.include_router(authentication.router)
 # No admin role is properly implemented atm, so the provided panel exists only for the testing purpose
-if ENVIRONMENT == 'dev':
+if ENVIRONMENT == 'dev':  # pragma: no cover
     app.include_router(admin.router)
 app.include_router(users.router)
 app.include_router(checks.router)

@@ -27,16 +27,21 @@ NAME_PREFIXES = [
 NOUNS = ["Enterprises", "Solutions", "Industries", "Innovations", "Products", "Systems", "Creations", "Ventures",
          "Concepts", "Holdings"]
 COMPANY_TYPES = ["LLC", "Corp.", "Inc.", "GmbH", "S.A.", "Co.", "LLP", "PLC", "B.V.", "AG"]
+COMPANY_NAME_COMPONENTS = (NAME_PREFIXES, NOUNS, COMPANY_TYPES)
 
 
-def populate_data() -> None:
+def populate_data(num_users: int = NUM_USERS, num_checks: int = NUM_CHECKS, num_items: int = NUM_ITEMS,
+                  date_start: datetime = DATE_START, date_end: datetime = DATE_END,
+                  company_name_components: tuple[list[str], list[str], list[str]] = COMPANY_NAME_COMPONENTS
+                  ) -> None:
+    name_prefixes, nouns, company_types = company_name_components
     with session_scope() as session:
         # Generate Users
         users = []
-        for i in range(NUM_USERS):
-            prefix = ' '.join(random.sample(NAME_PREFIXES, random.randint(1, 3)))
+        for i in range(num_users):
+            prefix = ' '.join(random.sample(name_prefixes, random.randint(1, 3)))
             user = User(
-                name=f'{prefix} {random.choice(NOUNS)} {random.randint(10, 2100)} {random.choice(COMPANY_TYPES)}',
+                name=f'{prefix} {random.choice(nouns)} {random.randint(10, 2100)} {random.choice(company_types)}',
                 login=f'user{i + 1}',
                 email=f'user{i + 1}@example.com',
                 password=Hash.bcrypt('password123')
@@ -46,35 +51,36 @@ def populate_data() -> None:
         session.flush()
 
         # Generate Checks and Items for each User
-        item_data = []
+        items = []
         for user in users:
-            for _ in range(NUM_CHECKS):
+            session.refresh(user)
+            for _ in range(num_checks):
                 check = Check(
                     creator_id=user.id,
                     payment_method=random.choice(list(PaymentMethod)),
                     paid_amount=Decimal(random.randint(10000, 50000)) / Decimal(100),
                     created_at=random.choice(
-                        [DATE_START + timedelta(days=i) for i in range((DATE_END - DATE_START).days)]
+                        [date_start + timedelta(days=i) for i in range((date_end - date_start).days)]
                     ))
                 session.add(check)
                 session.flush()
                 session.refresh(check)
 
                 # Generate Items for each Check
-                for _ in range(NUM_ITEMS):
-                    title = ' '.join(random.sample(NAME_PREFIXES, random.randint(3, 10)))
+                for _ in range(num_items):
+                    title = ' '.join(random.sample(name_prefixes, random.randint(3, 10)))
                     item = Item(
                         check_id=check.id,
                         title=f'{title} Item',
                         price=Decimal(random.randint(1000, 10000)) / Decimal(100),
                         quantity=random.randint(1, 10),
                     )
-                    item_data.append(item)
+                    items.append(item)
 
-        session.add_all(item_data)
+        session.add_all(items)
         session.commit()
 
-    print(f'Inserted {NUM_USERS} users and {NUM_USERS * NUM_CHECKS} checks into the DB')
+    print(f'Inserted {num_users} users and {num_users * num_checks} checks into the DB')
 
 
 if __name__ == '__main__':

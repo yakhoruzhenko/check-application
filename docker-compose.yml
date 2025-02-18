@@ -33,7 +33,7 @@ services:
         condition: service_healthy
     environment:
       # App config
-      APP_VERSION: "0.2.3"
+      APP_VERSION: "0.3.0"
       ENVIRONMENT: "dev"
       # Security
       ADMIN_TOKEN: "test1234"
@@ -85,7 +85,7 @@ services:
   check-app-test:
     extends: check-app-test-base
     volumes:
-      - ${PWD}/tests:/app/tests
+      - ${PWD}/:/app/
     depends_on:
       - postgres-test
     environment:
