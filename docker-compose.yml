@@ -33,6 +33,7 @@ services:
       postgres:
         condition: service_healthy
     environment:
+      APP_VERSION: "0.2.0"
       ENVIRONMENT: dev
       ADMIN_TOKEN: test1234
       PGHOST: postgres
