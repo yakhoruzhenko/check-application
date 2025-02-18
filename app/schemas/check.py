@@ -52,10 +52,23 @@ class CreateCheck(CreateCheckRequest):
 
 class CheckResponse(BaseModel):
     id: UUID
-    items: list[ItemResponse]
-    payment: Payment
-    total_amount: Decimal
-    change: Decimal
+    items: list[ItemResponse] = Field(..., example=[{
+        'title': 'Tomato',
+        'quantity': 10,
+        'price': '40.52',
+        'amount': '405.20'
+    }, {
+        'title': 'Potato',
+        'quantity': 5,
+        'price': '8.17',
+        'amount': '40.85'
+    }])
+    payment: Payment = Field(..., example={
+        'method': PaymentMethod.CASH.value,
+        'amount': '499.50'
+    })
+    total_amount: Decimal = Field(..., example='446.05')
+    change: Decimal = Field(..., example='53.45')
     # additional_info: str | None = None
     created_at: datetime
 

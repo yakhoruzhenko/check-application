@@ -5,7 +5,7 @@ from app.models.checks import Check
 
 
 def built_text_representation(check: Check) -> str:
-    LINE_LENGTH = int(os.getenv('LINE_LENGTH', 40))
+    LINE_LENGTH = int(os.getenv('CHECK_LINE_LENGTH', 40))
     LEFT_SIDE_MAX_LENGTH = int(LINE_LENGTH * 0.7)
     RIGHT_SIDE_MAX_LENGTH = LINE_LENGTH - LEFT_SIDE_MAX_LENGTH
     check_lines = []

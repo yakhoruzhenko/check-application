@@ -36,7 +36,7 @@ def delete_by_user_id(id: UUID, db: Session = Depends(get_db), fake_valitaton: N
     return user_repo.delete(id, db)
 
 
-@router.put('/users/{id}/password/', status_code=status.HTTP_204_NO_CONTENT)
+@router.put('/users/{id}/password', status_code=status.HTTP_204_NO_CONTENT)
 def reset_user_password(id: UUID, request: user.ResetUserPasswordRequest, db: Session = Depends(get_db),
                         fake_valitaton: None = Depends(admin_token)) -> None:
     user_repo.reset_password(user.ResetUserPassword(**request.model_dump(), user_id=id), db)
