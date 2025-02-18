@@ -1,0 +1,17 @@
+-r requirements.txt
+
+sqlalchemy[mypy]==2.0.23
+httpx==0.25.1
+types-passlib==1.7.7.13
+types-python-jose==3.3.4.8
+flake8==6.1.0
+isort==5.12.0
+mypy==1.4.1
+coverage==7.3.2
+pytest==7.4.3
+pytest-cov==4.1.0
+pytest-env==1.1.1
+pytest_mock==3.12.0
+sqlalchemy_schemadisplay==2.0
+yamllint==1.35.1
+bandit==1.8.3

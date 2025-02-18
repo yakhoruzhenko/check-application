@@ -1,0 +1,142 @@
+---
+services:
+  check-app-base:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: check-app-base
+    command: ["echo", "I only exist to be extended so I'll just exit, thanks"]
+
+  check-app-test-base:
+    # stdin_open: true
+    # tty: true
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: check-app-base
+    environment:
+      ENVIRONMENT: dev
+    volumes:
+      - ${PWD}/app:/app/app
+      - ${PWD}/tests:/app/tests
+    command: ["echo", "I only exist to be extended so I'll just exit, thanks"]
+
+  check-app:
+    extends: check-app-base
+    container_name: check-app
+    volumes:
+      - /entrypoint.sh
+      - ${PWD}/app:/app/app
+      - ${PWD}/utils:/app/utils
+      - ${PWD}/alembic:/app/alembic
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      ENVIRONMENT: dev
+      ADMIN_TOKEN: test1234
+      PGHOST: postgres
+      PGPORT: 5432
+      PGDATABASE: check_app
+      PGUSER: check
+      PGPASSWORD: password
+      LINE_LENGTH: 40
+    entrypoint: ["/app/entrypoint.sh"]
+    command:
+      [
+        "uvicorn",
+        "--reload",
+        "--workers",
+        "1",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8000",
+        "app.main:app",
+      ]
+    ports:
+      - 8000:8000
+
+  check-app-gunicorn:
+    extends: check-app
+    container_name: check-app-gunicorn
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command:
+      [
+        "gunicorn",
+        "app.main:app",
+        "--workers",
+        "3",
+        "--bind",
+        "0.0.0.0:8000",
+        "--reload",
+      ]
+    ports:
+      - 8000:8000
+
+  check-app-test:
+    extends: check-app-test-base
+    volumes:
+      - ${PWD}/tests:/app/tests
+    depends_on:
+      - postgres-test
+    environment:
+      PGHOST: postgres-test
+      PGPORT: 5432
+      PGDATABASE: check_app_test
+      PGUSER: check
+      PGPASSWORD: password
+    command: sh -c "coverage run -m pytest --cov=app"
+
+  postgres:
+    container_name: postgres
+    image: postgres:14
+    environment:
+      POSTGRES_DB: check_app
+      POSTGRES_USER: check
+      POSTGRES_PASSWORD: password
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d mydb"]
+      interval: 5s
+      retries: 5
+      start_period: 10s
+      timeout: 3s
+    ports:
+      - "5788:5432"
+
+  postgres-test:
+    container_name: postgres-test
+    image: postgres:14
+    environment:
+      POSTGRES_DB: check_app_test
+      POSTGRES_USER: check
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5789:5432"
+
+  check-app-erd:
+    extends: check-app-base
+    container_name: check-erd
+    volumes:
+      - ${PWD}/docs_builder/_static:/app/docs_builder/_static/
+      - ${PWD}/alembic:/app/alembic:ro
+      - ${PWD}/utils/erd.py:/app/utils/erd.py:ro
+    depends_on:
+      - postgres-test
+    environment:
+      PGHOST: postgres-test
+      PGPORT: 5432
+      PGDATABASE: check_app_test
+      PGUSER: check
+      PGPASSWORD: password
+    command: >
+      sh -c "
+        if ! apt list --installed | grep -q graphviz; then
+          apt-get update && apt-get install -y graphviz;
+        fi
+        pip install --no-cache-dir -r requirements-erd.txt
+        chmod -R 777 /app/utils
+        python utils/erd.py
+      "
