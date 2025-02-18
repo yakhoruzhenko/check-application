@@ -29,7 +29,7 @@ def create_check(request: check.CreateCheckRequest, fastapi_request: Request,
                  response: Response, db: Session = Depends(get_db),
                  current_user: User = Depends(get_current_user)) -> check.CheckResponse:
     '''
-    Create a new Check
+    Create a new check
     '''
     schema = check.CreateCheck(**request.model_dump(), creator_id=current_user.id)
     # TODO: consider validation for cases when change is less than zero
@@ -54,7 +54,7 @@ def get_own_checks(db: Session = Depends(get_db),
                    payment_method: PaymentMethod = Query(None, description='Filter by payment method')
                    ) -> Page[check.CheckResponse]:
     '''
-    Get all existing Checks of the current User
+    Retrieve all checks for the current user
     '''
     filters = check.CheckFilters(
         period_start=period_start,
@@ -70,7 +70,7 @@ def get_own_checks(db: Session = Depends(get_db),
 def get_check_by_id(id: UUID, request: Request, response: Response, db: Session = Depends(get_db),
                     current_user: User = Depends(get_current_user)) -> check.CheckResponse:
     '''
-    Get specific existing Check by its ID
+    Retrieve a specific check by its ID
     '''
     response.headers['X-Check-Text-Link'] = jsonable_encoder(get_response_url(request, id))
     return check.CheckResponse.model_validate(check_repo.get_by_id(db, id))
@@ -125,7 +125,7 @@ def get_check_by_id(id: UUID, request: Request, response: Response, db: Session 
 })
 def get_check_text_repr_by_id(id: UUID, db: Session = Depends(get_db)) -> Response:
     '''
-    Get specific existing Check textual representation by its ID
+    Retrieve the textual representation of a specific check by its ID
     '''
     existing_check = check_repo.get_by_id(db, id)
     text = existing_check.repr
