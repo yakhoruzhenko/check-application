@@ -29,8 +29,7 @@ jobs:
 
       - name: Run Linting
         run: |
-          docker compose run --rm check-app-test-base sh -c "flake8 . && isort --check --diff . && yamllint ."
-          # docker compose run --rm check-app-test-base sh -c "flake8 . && isort --check --diff . && mypy . && yamllint ."
+          docker compose run --rm check-app-test-base sh -c "flake8 . && isort --check --diff . && mypy . && yamllint ."
 
       - name: Run Security Analysis
         run: |
