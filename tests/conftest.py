@@ -5,6 +5,7 @@ from alembic import command
 from alembic.config import Config
 from fastapi.testclient import TestClient
 from sqlalchemy.orm.session import close_all_sessions
+from tests import SeededUser
 from utils.populate import populate_data
 
 from app.infra.database import get_db_url, session_scope
@@ -30,12 +31,13 @@ def test_client() -> TestClient:
 
 
 @pytest.fixture(scope='session', autouse=True)
-def seed_db() -> None:
-    populate_data(num_users=1, num_checks=1, num_items=2)
+def seed_db() -> dict[str, str]:
+    return populate_data(num_users=1, num_checks=1, num_items=2)[0]
 
 
 @pytest.fixture(scope='session')
-def seeded_user() -> UserResponseWithChecks:
+def seeded_user(seed_db: dict[str, str]) -> SeededUser:
     with session_scope() as session:
         user = session.query(User).filter(User.login == 'user1').one()
-        return UserResponseWithChecks.model_validate(user)
+        user_schema = UserResponseWithChecks.model_validate(user)
+        return SeededUser(**user_schema.model_dump(), password=seed_db['password'])

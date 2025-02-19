@@ -38,14 +38,14 @@ def create_check(request: check.CreateCheckRequest, fastapi_request: Request,
     return check.CheckResponse.model_validate(new_check)
 
 
-@router.get('', status_code=status.HTTP_200_OK)
+@router.get('/own', status_code=status.HTTP_200_OK)
 def get_own_checks(db: Session = Depends(get_db),
                    current_user: User = Depends(get_current_user),
                    pagination_params: Params = Depends(),
                    period_start: date = Query(None, description='Filter by check creation date start (included)',
                                               example='2025-02-14'),
                    period_end: date = Query(None, description='Filter by check creation date end (included)',
-                                            example='2025-02-15'),
+                                            example='2025-04-15'),
                    total_amount_ge: Decimal = Query(None, description='Filter by total amount (greater or equal)',
                                                     example='149.99'),
                    total_amount_le: Decimal = Query(None, description='Filter by total amount (less or equal)',
@@ -82,43 +82,22 @@ def get_check_by_id(id: UUID, request: Request, response: Response, db: Session 
         "content": {
             "text/html": {
                 "example":
-                '''
-                <pre>    Weather-resistant Handmade Smart
-                            Products 511 Co.
-                    ========================================
-                    3.00 x 75.36
-                    Compact Top-tier
-                    Professional Hygienic Modern
-                    Advanced Vintage Item             226.08
-                    ----------------------------------------
-                    3.00 x 10.92
-                    All-season Handmade
-                    Sustainable Anti-slip
-                    Affordable Item                    32.76
-                    ----------------------------------------
-                    1.00 x 51.72
-                    Classic High-quality
-                    Customizable Professional
-                    Exclusive Sustainable Vegan
-                    Item                               51.72
-                    ----------------------------------------
-                    1.00 x 24.93
-                    Stackable Colorful Classic
-                    Recyclable Eco-friendly
-                    Fast-charging Heavy-duty
-                    Compact Custom Item                24.93
-                    ----------------------------------------
-                    4.00 x 11.77
-                    Heavy-duty Trendy High-
-                    performance Item                   47.08
-                    ========================================
-                    TOTAL                             382.57
-                    Cash                              446.49
-                    Change                             63.92
-                    ========================================
-                                05.03.2025 06:30
-                        Thank you for your purchase!      </pre>
-                '''
+                '<pre>Temperature-resistant Weather-resistant '
+                '\n           Products 1562 LLC            '
+                '\n========================================'
+                '\n10.00 x 40.52'
+                '\nTomato                            405.20'
+                '\n----------------------------------------'
+                '\n5.00 x 8.17'
+                '\nPotato                             40.85'
+                '\n========================================'
+                '\nTOTAL                             446.05'
+                '\nCash                              499.50'
+                '\nChange                             53.45'
+                '\n========================================'
+                '\n'
+                '            19.02.2025 16:09            \n'
+                '      Thank you for your purchase!      </pre>'
             }
         }
     }

@@ -23,6 +23,16 @@ To start developing locally, first, create a Python virtual environment. Then, w
 
    pip3 install -r requirements.txt
 
+Application Build
+-----------------
+You can force the application build by running the following command:
+
+.. code-block:: bash
+
+   make build
+
+This command runs `docker compose build check-app`, ensuring all dependencies and configurations reflect the latest codebase state.
+
 Linting and Static Analysis
 ----------------------------
 To run the linting and static analysis tools, use the following command:
@@ -52,7 +62,24 @@ You can seed the local database with dummy data using the following command.
 
    make seed  
 
-This command starts the application in detached mode and runs a script inside the container to populate the database with test data. This dummy data can be used to generate a text representation of the `check` entity along with its related items.
+This command starts the application in detached mode and executes a script inside the container to populate the database with test data. Once the process is complete, you should see output similar to the following, displaying the generated users along with their login credentials:
+
+.. code-block:: bash  
+
+   Container is running, executing script...
+   Inserted 10 users and 1000 checks into the DB
+   User login: user1, password: clkzxkwx6x
+   User login: user2, password: hk0y73v5ax
+   User login: user3, password: 34tt9fty8o
+   User login: user4, password: spjt4bkbbu
+   User login: user5, password: s9vj6nghuk
+   User login: user6, password: cecehvm7fs
+   User login: user7, password: 3c6eqij9lq
+   User login: user8, password: v6bntoks5w
+   User login: user9, password: esm1wh50ru
+   User login: user10, password: 2vwxlqotqn
+
+This test data can be used to generate a text representation of the check entity and its related items using the appropriate API endpoint.
 
 Example of generated text:
 

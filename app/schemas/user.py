@@ -7,8 +7,8 @@ from app.schemas.check import CheckResponse
 
 
 class CreateUserRequest(BaseModel):
-    name: str = Field(min_length=1, max_length=512, example='Tester')
-    login: str = Field(min_length=4, max_length=512, example='test')
+    name: str = Field(min_length=1, max_length=512, examples=['Tester'])
+    login: str = Field(min_length=4, max_length=512, examples=['test'])
     email: EmailStr
     password: str = Field(min_length=8, max_length=512)
 
@@ -23,9 +23,9 @@ class ResetUserPassword(ResetUserPasswordRequest):
 
 class UserResponse(BaseModel):
     id: UUID
-    name: str = Field(example='Tester')
-    login: str = Field(example='test')
-    email: str = Field(example='test@mail.com')
+    name: str = Field(examples=['Tester'])
+    login: str = Field(examples=['test'])
+    email: str = Field(examples=['test@mail.com'])
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)

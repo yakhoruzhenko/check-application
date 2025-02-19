@@ -1,4 +1,5 @@
 import random
+import string
 from datetime import datetime, timedelta
 from decimal import Decimal
 
@@ -33,20 +34,23 @@ COMPANY_NAME_COMPONENTS = (NAME_PREFIXES, NOUNS, COMPANY_TYPES)
 def populate_data(num_users: int = NUM_USERS, num_checks: int = NUM_CHECKS, num_items: int = NUM_ITEMS,
                   date_start: datetime = DATE_START, date_end: datetime = DATE_END,
                   company_name_components: tuple[list[str], list[str], list[str]] = COMPANY_NAME_COMPONENTS
-                  ) -> None:
+                  ) -> list[dict[str, str]]:
     name_prefixes, nouns, company_types = company_name_components
     with session_scope() as session:
         # Generate Users
-        users = []
+        users: list[User] = []
+        logins_passwords: list[dict[str, str]] = []
         for i in range(num_users):
             prefix = ' '.join(random.sample(name_prefixes, random.randint(1, 3)))
+            password = ''.join(random.choices(string.ascii_lowercase + string.digits, k=10))
             user = User(
                 name=f'{prefix} {random.choice(nouns)} {random.randint(10, 2100)} {random.choice(company_types)}',
                 login=f'user{i + 1}',
                 email=f'user{i + 1}@example.com',
-                password=Hash.bcrypt('password123')
+                password=Hash.bcrypt(password)
             )
             users.append(user)
+            logins_passwords.append({'login': user.login, 'password': password})
         session.add_all(users)
         session.flush()
 
@@ -76,11 +80,14 @@ def populate_data(num_users: int = NUM_USERS, num_checks: int = NUM_CHECKS, num_
                         quantity=random.randint(1, 10),
                     )
                     items.append(item)
-
-        session.add_all(items)
+        if items:
+            session.add_all(items)
         session.commit()
 
     print(f'Inserted {num_users} users and {num_users * num_checks} checks into the DB')
+    for mapping in logins_passwords:
+        print(f'User login: {mapping["login"]}, password: {mapping["password"]}')
+    return logins_passwords
 
 
 if __name__ == '__main__':

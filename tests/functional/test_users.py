@@ -1,8 +1,6 @@
 from fastapi.testclient import TestClient
 from starlette import status
-from tests import datetime_to_str, random_string
-
-from app.schemas.user import UserResponseWithChecks
+from tests import SeededUser, datetime_to_str, random_string
 
 
 def test_create_user_success(test_client: TestClient) -> None:
@@ -22,7 +20,7 @@ def test_create_user_success(test_client: TestClient) -> None:
         assert response_json['email'] == email
 
 
-def test_create_user_already_exists(test_client: TestClient, seeded_user: UserResponseWithChecks) -> None:
+def test_create_user_already_exists(test_client: TestClient, seeded_user: SeededUser) -> None:
     with test_client:
         response = test_client.post(url='/users', json=dict(name=random_string(),
                                                             login=seeded_user.login,
@@ -34,10 +32,10 @@ def test_create_user_already_exists(test_client: TestClient, seeded_user: UserRe
             {'detail': f'User with login: {seeded_user.login} already exists'}
 
 
-def test_get_current_user_profile_success(test_client: TestClient, seeded_user: UserResponseWithChecks) -> None:
+def test_get_current_user_profile_success(test_client: TestClient, seeded_user: SeededUser) -> None:
     with test_client:
-
-        auth_response = test_client.post(url='/login', data=dict(username=seeded_user.login, password='password123'))
+        auth_response = test_client.post(url='/login', data=dict(username=seeded_user.login,
+                                                                 password=seeded_user.password))
 
         assert auth_response.status_code == status.HTTP_200_OK
 
@@ -45,7 +43,7 @@ def test_get_current_user_profile_success(test_client: TestClient, seeded_user: 
             url='/users/profile',
             headers={'Authorization': f'Bearer {auth_response.json()["access_token"]}'})
 
-        assert get_user_profile_response.status_code == 200
+        assert get_user_profile_response.status_code == status.HTTP_200_OK
         get_user_profile_response_json = get_user_profile_response.json()
         assert get_user_profile_response_json['id'] == str(seeded_user.id)
         assert get_user_profile_response_json['name'] == seeded_user.name
@@ -54,3 +52,11 @@ def test_get_current_user_profile_success(test_client: TestClient, seeded_user: 
         assert get_user_profile_response_json['created_at'] == datetime_to_str(seeded_user.created_at)
         assert len(get_user_profile_response_json['checks']) == 1
         assert len(get_user_profile_response_json['checks'][0]['items']) == 2
+
+
+def test_get_current_user_profile_unauthorized_error(test_client: TestClient) -> None:
+    with test_client:
+        response = test_client.get(url='/users/profile')
+
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+        assert response.json() == {'detail': 'Not authenticated'}

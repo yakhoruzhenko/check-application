@@ -25,7 +25,7 @@ def create(request: user.CreateUserRequest, db: Session) -> users.User:
     return new_user
 
 
-def reset_password(request: user.ResetUserPassword, db: Session) -> None:
+def reset_password(request: user.ResetUserPassword, db: Session) -> None:  # pragma: no cover [admin]
     user = db.query(users.User).filter(users.User.id == request.user_id).first()
     if not user:
         raise HTTPException(
@@ -37,19 +37,19 @@ def reset_password(request: user.ResetUserPassword, db: Session) -> None:
     db.commit()
 
 
-def get_all(db: Session, pagination_params: Params) -> Page[users.User]:
+def get_all(db: Session, pagination_params: Params) -> Page[users.User]:  # pragma: no cover [admin]
     return paginate(db.query(users.User), params=pagination_params)  # type: ignore
 
 
 def get_by_id(id: UUID, db: Session) -> users.User:
     user = db.query(users.User).filter(users.User.id == id).first()
-    if not user:
+    if not user:  # pragma: no cover [admin]
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f'User with ID: {id} is not found')
     return user
 
 
-def delete(id: UUID, db: Session) -> str:
+def delete(id: UUID, db: Session) -> str:  # pragma: no cover [admin]
     user = db.query(users.User).filter(users.User.id == id)
     if not user.first():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,

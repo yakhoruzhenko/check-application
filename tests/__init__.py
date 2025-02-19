@@ -3,7 +3,13 @@ import random
 import string
 import sys
 
+from app.schemas.user import UserResponseWithChecks
+
 sys.path.append('..')
+
+
+class SeededUser(UserResponseWithChecks):
+    password: str
 
 
 def random_string(k: int = 10) -> str:

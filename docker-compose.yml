@@ -7,19 +7,6 @@ services:
     container_name: check-app-base
     command: ["echo", "I only exist to be extended so I'll just exit, thanks"]
 
-  check-app-test-base:
-    # stdin_open: true
-    # tty: true
-    build:
-      context: .
-      dockerfile: Dockerfile.dev
-    container_name: check-app-base
-    environment:
-      ENVIRONMENT: "dev"
-    volumes:
-      - ${PWD}/:/app/
-    command: ["echo", "I only exist to be extended so I'll just exit, thanks"]
-
   check-app:
     extends: check-app-base
     container_name: check-app
@@ -81,6 +68,19 @@ services:
       ]
     ports:
       - 8000:8000
+
+  check-app-test-base:
+    # stdin_open: true
+    # tty: true
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: check-app-test-base
+    environment:
+      ENVIRONMENT: "dev"
+    volumes:
+      - ${PWD}/:/app/
+    command: ["echo", "I only exist to be extended so I'll just exit, thanks"]
 
   check-app-test:
     extends: check-app-test-base

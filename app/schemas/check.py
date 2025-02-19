@@ -30,12 +30,12 @@ class Payment(BaseModel):
 
 
 class CreateCheckRequest(BaseModel):
-    payment: Payment = Field(..., example={
+    payment: Payment = Field(..., examples=[{
         'method': PaymentMethod.CASH.value,
         'amount': '499.50'
-    })
-    additional_info: str | None = Field(None, max_length=512, example='From loyal customer')
-    check_items: list[Item] = Field(..., example=[{
+    }])
+    additional_info: str | None = Field(None, max_length=512, examples=['From loyal customer'])
+    items: list[Item] = Field(..., examples=[{
         'title': 'Tomato',
         'quantity': 10,
         'price': '40.52'
@@ -52,7 +52,7 @@ class CreateCheck(CreateCheckRequest):
 
 class CheckResponse(BaseModel):
     id: UUID
-    items: list[ItemResponse] = Field(..., example=[{
+    items: list[ItemResponse] = Field(..., examples=[{
         'title': 'Tomato',
         'quantity': 10,
         'price': '40.52',
@@ -63,12 +63,12 @@ class CheckResponse(BaseModel):
         'price': '8.17',
         'amount': '40.85'
     }])
-    payment: Payment = Field(..., example={
+    payment: Payment = Field(..., examples=[{
         'method': PaymentMethod.CASH.value,
         'amount': '499.50'
-    })
-    total_amount: Decimal = Field(..., example='446.05')
-    change: Decimal = Field(..., example='53.45')
+    }])
+    total_amount: Decimal = Field(..., examples=['446.05'])
+    change: Decimal = Field(..., examples=['53.45'])
     # additional_info: str | None = None
     created_at: datetime
 
@@ -85,12 +85,12 @@ class CheckResponse(BaseModel):
 
         check_values = {k: getattr(values, k) for k in values.__table__.columns.keys()}
 
-        if 'payment' not in check_values:
+        if 'payment' not in check_values:  # pragma: no branch
             check_values['payment'] = Payment(
                 method=check_values.get('payment_method'),  # type: ignore
                 amount=check_values.get('paid_amount'),  # type: ignore
             )
-        if 'items' not in check_values:
+        if 'items' not in check_values:  # pragma: no branch
             check_values['items'] = values.items
         return check_values
 
