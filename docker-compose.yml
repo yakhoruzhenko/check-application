@@ -33,7 +33,7 @@ services:
         condition: service_healthy
     environment:
       # App config
-      APP_VERSION: "0.2.2"
+      APP_VERSION: "0.2.3"
       ENVIRONMENT: "dev"
       # Security
       ADMIN_TOKEN: "test1234"
