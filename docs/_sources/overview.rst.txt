@@ -15,10 +15,13 @@ Stack
 
 This application is built using the following technologies:
 
+- **Debian GNU/Linux 12**: https://www.debian.org
+- **Python 3.11**: https://www.python.org
 - **FastAPI**: https://fastapi.tiangolo.com
-- **Uvicorn**: https://www.uvicorn.org
 - **SQLAlchemy**: https://www.sqlalchemy.org
 - **PostgreSQL**: https://www.postgresql.org
+- **Uvicorn**: https://www.uvicorn.org
+- **Docker**: https://www.docker.com
 
 Configuration
 -------------
