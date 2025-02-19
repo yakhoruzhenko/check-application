@@ -1,3 +1,9 @@
+buid: ## build
+	docker compose build check-app
+
+up: ## up
+	docker compose up -d check-app
+
 clean: ## clean
 	rm -rf .pytest_cache
 	rm -rf .mypy_cache
@@ -8,9 +14,6 @@ down: ## down
 
 down-v: ## down and remove all existing volumes
 	docker compose down -v
-
-up: ## up
-	docker compose up -d check-app
 
 lint: ## lint
 	docker compose run --rm check-app-test-base sh -c " \
@@ -26,9 +29,7 @@ test: ## test
 	docker compose run --rm check-app-test
 
 coverage: ## coverage
-	docker compose run --rm check-app-test sh -c " \
-		coverage run -m pytest && \
-		coverage report -m "
+	docker compose run --rm check-app-test coverage run -m pytest
 
 seed: ## spins up the local app in the detached mode and seeds the dummy data into the DB
 	docker compose up -d check-app

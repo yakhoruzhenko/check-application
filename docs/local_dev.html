@@ -48,6 +48,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Local Development and Run</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#application-local-run">Application Local Run</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#local-development">Local Development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#application-build">Application Build</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#linting-and-static-analysis">Linting and Static Analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#security-testing">Security Testing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#seeding-the-database">Seeding the Database</a></li>
@@ -101,6 +102,14 @@
 </pre></div>
 </div>
 </section>
+<section id="application-build">
+<h2>Application Build<a class="headerlink" href="#application-build" title="Link to this heading"></a></h2>
+<p>You can force the application build by running the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>build
+</pre></div>
+</div>
+<p>This command runs <cite>docker compose build check-app</cite>, ensuring all dependencies and configurations reflect the latest codebase state.</p>
+</section>
 <section id="linting-and-static-analysis">
 <h2>Linting and Static Analysis<a class="headerlink" href="#linting-and-static-analysis" title="Link to this heading"></a></h2>
 <p>To run the linting and static analysis tools, use the following command:</p>
@@ -123,7 +132,22 @@
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>seed
 </pre></div>
 </div>
-<p>This command starts the application in detached mode and runs a script inside the container to populate the database with test data. This dummy data can be used to generate a text representation of the <cite>check</cite> entity along with its related items.</p>
+<p>This command starts the application in detached mode and executes a script inside the container to populate the database with test data. Once the process is complete, you should see output similar to the following, displaying the generated users along with their login credentials:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Container<span class="w"> </span>is<span class="w"> </span>running,<span class="w"> </span>executing<span class="w"> </span>script...
+Inserted<span class="w"> </span><span class="m">10</span><span class="w"> </span>users<span class="w"> </span>and<span class="w"> </span><span class="m">1000</span><span class="w"> </span>checks<span class="w"> </span>into<span class="w"> </span>the<span class="w"> </span>DB
+User<span class="w"> </span>login:<span class="w"> </span>user1,<span class="w"> </span>password:<span class="w"> </span>clkzxkwx6x
+User<span class="w"> </span>login:<span class="w"> </span>user2,<span class="w"> </span>password:<span class="w"> </span>hk0y73v5ax
+User<span class="w"> </span>login:<span class="w"> </span>user3,<span class="w"> </span>password:<span class="w"> </span>34tt9fty8o
+User<span class="w"> </span>login:<span class="w"> </span>user4,<span class="w"> </span>password:<span class="w"> </span>spjt4bkbbu
+User<span class="w"> </span>login:<span class="w"> </span>user5,<span class="w"> </span>password:<span class="w"> </span>s9vj6nghuk
+User<span class="w"> </span>login:<span class="w"> </span>user6,<span class="w"> </span>password:<span class="w"> </span>cecehvm7fs
+User<span class="w"> </span>login:<span class="w"> </span>user7,<span class="w"> </span>password:<span class="w"> </span>3c6eqij9lq
+User<span class="w"> </span>login:<span class="w"> </span>user8,<span class="w"> </span>password:<span class="w"> </span>v6bntoks5w
+User<span class="w"> </span>login:<span class="w"> </span>user9,<span class="w"> </span>password:<span class="w"> </span>esm1wh50ru
+User<span class="w"> </span>login:<span class="w"> </span>user10,<span class="w"> </span>password:<span class="w"> </span>2vwxlqotqn
+</pre></div>
+</div>
+<p>This test data can be used to generate a text representation of the check entity and its related items using the appropriate API endpoint.</p>
 <p>Example of generated text:</p>
 <div class="highlight-html notranslate"><div class="highlight"><pre><span></span>    Weather-resistant Handmade Smart
             Products 511 Co.

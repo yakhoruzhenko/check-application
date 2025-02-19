@@ -16,7 +16,7 @@ def create(db: Session, schema: check.CreateCheck) -> checks.Check:
                              paid_amount=schema.payment.amount, additional_info=schema.additional_info)
     db.add(new_check)
     db.flush()
-    for item in schema.check_items:
+    for item in schema.items:
         db.add(checks.Item(**item.model_dump(), check_id=new_check.id))
     db.commit()
     db.refresh(new_check)
@@ -33,7 +33,7 @@ def get_all_by_user(db: Session, creator_id: UUID, pagination_params: Params,
         # adding timdelta is needed because at the comparing time date is converted to timestamp of such format:
         # 2025-02-14 00:00:00, so when both dates are i.e. 2025-02-14, Postgres will look up for all checks
         # that were create between 2025-02-14 00:00:00 and 2025-02-14 00:00:00
-        query = query.filter(checks.Check.created_at <= filters.period_end + timedelta(days=1))
+        query = query.filter(checks.Check.created_at < filters.period_end + timedelta(days=1))
     if filters.total_amount_ge:
         query = query.filter(checks.Check.total_amount >= filters.total_amount_ge)
     if filters.total_amount_le:
@@ -52,7 +52,7 @@ def get_by_id(db: Session, id: UUID) -> checks.Check:
     return selected_check
 
 
-def delete(db: Session, id: UUID) -> str:
+def delete(db: Session, id: UUID) -> str:  # pragma: no cover [admin]
     selected_check = db.query(checks.Check).filter(checks.Check.id == id)
     if not selected_check.first():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
