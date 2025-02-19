@@ -22,10 +22,10 @@ def login(request: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(
     user = db.query(users.User).filter(users.User.login == request.username).first()
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f'There is no username with such login: {request.username}')
+                            detail=f'There is no user with such login: {request.username}')
     if not Hash.verify(user.password, request.password):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-                            detail=f'Invalid password for {request.username}')
+                            detail=f'Invalid password for user with login: {request.username}')
 
     access_token = auth.create_access_token(data={'id': str(user.id)})
     return {'access_token': access_token, 'token_type': 'bearer'}

@@ -35,7 +35,7 @@ def seed_db() -> None:
 
 
 @pytest.fixture(scope='session')
-def get_seeded_user() -> UserResponseWithChecks:
+def seeded_user() -> UserResponseWithChecks:
     with session_scope() as session:
         user = session.query(User).filter(User.login == 'user1').one()
         return UserResponseWithChecks.model_validate(user)
