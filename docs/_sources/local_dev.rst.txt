@@ -3,7 +3,6 @@ Local Development and Run
 
 Application Local Run
 ---------------------
-
 You can run the Check Application locally with the following command. It doesn't require any dependencies installation because the application and its dependencies, including PostgreSQL, will be run in a Docker environment:
 
 .. code-block:: bash
@@ -16,7 +15,6 @@ Once the application is running, you can access its API documentation at http://
 
 Local Development
 ------------------
-
 To start developing locally, first, create a Python virtual environment. Then, with the environment activated, install all required dependencies by running the following command (this step is necessary for syntax highlighting in your editor):
 
 .. code-block:: bash
@@ -32,6 +30,34 @@ You can force the application build by running the following command:
    make build
 
 This command runs `docker compose build check-app`, ensuring all dependencies and configurations reflect the latest codebase state.
+
+Testing with pytest
+-------------------
+To run the test suite, use the following command:
+
+.. code-block:: bash
+
+   make test
+
+This will execute the test suite inside the check-app-test container using pytest. For debugging and rerunning the last failed test, add the `--pdb` and `--lf` keys to the pytest section in `setup.cfg`.
+
+.. note::
+
+    The test suite does not include cases for invalid user input, as such scenarios are already validated by FastAPI and Pydantic. 
+
+Running Tests with Coverage
+---------------------------
+To ensure full test coverage, use:
+
+.. code-block:: bash
+
+   make coverage
+
+This will run pytest with `coverage` inside the container and generate a coverage report.
+
+.. note::
+
+    100% test coverage is the target for the project.
 
 Linting and Static Analysis
 ----------------------------
@@ -52,6 +78,10 @@ To run the security tests using `bandit`, use the following command:
    make sec
 
 This will run `bandit` to check for potential security vulnerabilities in the code.
+
+.. note::
+
+    Tests, linting, and security checks are included in the CI workflow (GitHub Actions). 
 
 Seeding the Database
 --------------------

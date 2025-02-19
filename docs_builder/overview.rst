@@ -12,7 +12,6 @@ Author
 
 Stack
 ------
-
 This application is built using the following technologies:
 
 - **Debian GNU/Linux 12**: https://www.debian.org
