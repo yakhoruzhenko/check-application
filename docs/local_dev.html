@@ -49,6 +49,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#application-local-run">Application Local Run</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#local-development">Local Development</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#application-build">Application Build</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#testing-with-pytest">Testing with pytest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-tests-with-coverage">Running Tests with Coverage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#linting-and-static-analysis">Linting and Static Analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#security-testing">Security Testing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#seeding-the-database">Seeding the Database</a></li>
@@ -110,6 +112,30 @@
 </div>
 <p>This command runs <cite>docker compose build check-app</cite>, ensuring all dependencies and configurations reflect the latest codebase state.</p>
 </section>
+<section id="testing-with-pytest">
+<h2>Testing with pytest<a class="headerlink" href="#testing-with-pytest" title="Link to this heading"></a></h2>
+<p>To run the test suite, use the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nb">test</span>
+</pre></div>
+</div>
+<p>This will execute the test suite inside the check-app-test container using pytest. For debugging and rerunning the last failed test, add the <cite>–pdb</cite> and <cite>–lf</cite> keys to the pytest section in <cite>setup.cfg</cite>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The test suite does not include cases for invalid user input, as such scenarios are already validated by FastAPI and Pydantic.</p>
+</div>
+</section>
+<section id="running-tests-with-coverage">
+<h2>Running Tests with Coverage<a class="headerlink" href="#running-tests-with-coverage" title="Link to this heading"></a></h2>
+<p>To ensure full test coverage, use:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>coverage
+</pre></div>
+</div>
+<p>This will run pytest with <cite>coverage</cite> inside the container and generate a coverage report.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>100% test coverage is the target for the project.</p>
+</div>
+</section>
 <section id="linting-and-static-analysis">
 <h2>Linting and Static Analysis<a class="headerlink" href="#linting-and-static-analysis" title="Link to this heading"></a></h2>
 <p>To run the linting and static analysis tools, use the following command:</p>
@@ -125,6 +151,10 @@
 </pre></div>
 </div>
 <p>This will run <cite>bandit</cite> to check for potential security vulnerabilities in the code.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Tests, linting, and security checks are included in the CI workflow (GitHub Actions).</p>
+</div>
 </section>
 <section id="seeding-the-database">
 <h2>Seeding the Database<a class="headerlink" href="#seeding-the-database" title="Link to this heading"></a></h2>
