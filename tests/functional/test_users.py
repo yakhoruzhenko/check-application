@@ -1,11 +1,15 @@
+import pytest
 from fastapi.testclient import TestClient
 from starlette import status
 from tests import SeededUser, datetime_to_str, random_string
 
 
-def test_create_user_success(test_client: TestClient) -> None:
+@pytest.mark.parametrize('login', [
+    (random_string().lower()),
+    (random_string().upper()),
+])  # Asserts that the login string is case-insensitive
+def test_create_user_success(test_client: TestClient, login: str) -> None:
     name = random_string()
-    login = random_string()
     email = f'{random_string()}@gmail.com'
     with test_client:
         response = test_client.post(url='/users', json=dict(name=name, login=login, email=email,
@@ -16,7 +20,7 @@ def test_create_user_success(test_client: TestClient) -> None:
         assert response_json['id']
         assert response_json['created_at']
         assert response_json['name'] == name
-        assert response_json['login'] == login
+        assert response_json['login'] == login.lower()
         assert response_json['email'] == email
 
 

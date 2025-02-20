@@ -1,11 +1,14 @@
+import pytest
 from fastapi.testclient import TestClient
 from starlette import status
 from tests import SeededUser, random_string
 
 
-def test_login_success(test_client: TestClient, seeded_user: SeededUser) -> None:
+@pytest.mark.parametrize('str_method', ['lower', 'capitalize', 'upper'])
+def test_login_success(test_client: TestClient, seeded_user: SeededUser, str_method: str) -> None:
     with test_client:
-        response = test_client.post(url='/login', data=dict(username=seeded_user.login, password=seeded_user.password))
+        login = getattr(seeded_user.login, str_method)()  # Asserts that the login string is case-insensitive
+        response = test_client.post(url='/login', data=dict(username=login, password=seeded_user.password))
 
         assert response.status_code == status.HTTP_200_OK
         assert response.json()['access_token']
