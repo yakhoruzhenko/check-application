@@ -19,7 +19,7 @@ def login(request: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(
     '''
     Login with the user's username (login) and password to obtain an access token
     '''
-    user = db.query(users.User).filter(users.User.login == request.username).first()
+    user = db.query(users.User).filter(users.User.login == request.username.lower()).first()
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f'There is no user with such login: {request.username}')

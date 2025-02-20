@@ -1,16 +1,22 @@
 from datetime import datetime
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict, EmailStr, Field
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
 
 from app.schemas.check import CheckResponse
 
 
 class CreateUserRequest(BaseModel):
     name: str = Field(min_length=1, max_length=512, examples=['Tester'])
-    login: str = Field(min_length=4, max_length=512, examples=['test'])
+    login: str = Field(min_length=4, max_length=512, examples=['test'],
+                       description='Will be stored in lowercase')
     email: EmailStr
     password: str = Field(min_length=8, max_length=512)
+
+    @field_validator('login', mode='after')
+    @classmethod
+    def lower_case(cls, value: str) -> str:
+        return value.lower()
 
 
 class ResetUserPasswordRequest(BaseModel):
