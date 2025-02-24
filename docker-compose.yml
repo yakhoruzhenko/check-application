@@ -3,7 +3,7 @@ services:
   check-app-base:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.local
     container_name: check-app-base
     command: ["echo", "I only exist to be extended so I'll just exit, thanks"]
 
@@ -20,7 +20,7 @@ services:
         condition: service_healthy
     environment:
       # App config
-      APP_VERSION: "0.3.2"
+      APP_VERSION: "0.3.3"
       ENVIRONMENT: "dev"
       # Security
       ADMIN_TOKEN: "test1234"
