@@ -1,20 +1,23 @@
 ---
-name: Build
+name: Build and Push
 on:  # yamllint disable-line rule:truthy
   push:
-    tags:
-      - "v[0-9]+.[0-9]+.[0-9]+"
     branches:
       - main
   pull_request:
     branches:
       - main
+  release:
+    types:
+      - published
+
 concurrency:
   group: ${{ github.ref }}
   cancel-in-progress: true
+
 jobs:
-  build:
-    name: Lint & Security Checks
+  ci-checks:
+    name: Lint, Security & Tests
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -36,3 +39,36 @@ jobs:
       - name: Run Tests with Coverage
         run: |
           docker compose run --rm check-app-test coverage run -m pytest
+
+  push-image:
+    name: Build & Push Docker Image
+    runs-on: ubuntu-latest
+    needs: ci-checks
+    if: |
+      github.event_name == 'release' &&
+      github.event.action == 'published'
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Check release tag format
+        run: |
+          if [[ "${GITHUB_REF}" =~ ^refs/tags/v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Valid tag"
+          else
+            echo "Invalid tag"
+            exit 1
+          fi
+      - name: Log in to Docker Hub
+        run: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" | &&
+          docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+      - name: Build Docker Image
+        run: |
+          VERSION_TAG=${{ github.event.release.tag_name }}
+          docker build -f Dockerfile.prod -t yarusx/check-app:$VERSION_TAG .
+          docker tag yarusx/check-app:$VERSION_TAG yarusx/check-app:latest
+      - name: Push Docker Image
+        run: |
+          IMAGE_TAG=${GITHUB_REF#refs/tags/v}
+          docker push yarusx/check-app:$IMAGE_TAG
+          docker push yarusx/check-app:latest
