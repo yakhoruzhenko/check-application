@@ -47,7 +47,7 @@ def populate_data(num_users: int = NUM_USERS, num_checks: int = NUM_CHECKS, num_
                 name=f'{prefix} {random.choice(nouns)} {random.randint(10, 2100)} {random.choice(company_types)}',
                 login=f'user{i + 1}',
                 email=f'user{i + 1}@example.com',
-                password=Hash.bcrypt(password)
+                password=Hash.encrypt(password)
             )
             users.append(user)
             logins_passwords.append({'login': user.login, 'password': password})

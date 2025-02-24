@@ -146,7 +146,7 @@ def test_get_own_checks_filters_all_populated_found(test_client: TestClient, que
     password = random_string()
     with session_scope() as session:
         user = User(name=random_string(), login=login, email=f'{random_string}@mail.com',
-                    password=Hash.bcrypt(password))
+                    password=Hash.encrypt(password))
         session.add(user)
         session.flush()
         session.refresh(user)
@@ -205,7 +205,7 @@ def test_get_own_checks_filters_partial_match(test_client: TestClient, query_par
     password = random_string()
     with session_scope() as session:
         user = User(name=random_string(), login=login, email=f'{random_string}@mail.com',
-                    password=Hash.bcrypt(password))
+                    password=Hash.encrypt(password))
         session.add(user)
         session.flush()
         session.refresh(user)

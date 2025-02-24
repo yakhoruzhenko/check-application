@@ -14,7 +14,7 @@ from app.services.hashing import Hash
 
 def create(request: user.CreateUserRequest, db: Session) -> users.User:
     new_user = users.User(name=request.name, email=request.email, login=request.login,
-                          password=Hash.bcrypt(request.password))
+                          password=Hash.encrypt(request.password))
     db.add(new_user)
     try:
         db.commit()
@@ -32,7 +32,7 @@ def reset_password(request: user.ResetUserPassword, db: Session) -> None:  # pra
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f'There is no user with ID: {request.user_id}'
         )
-    user.password = Hash.bcrypt(request.new_password)
+    user.password = Hash.encrypt(request.new_password)
     db.add(user)
     db.commit()
 
