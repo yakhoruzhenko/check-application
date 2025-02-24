@@ -5,7 +5,6 @@ fastapi==0.115.8
 fastapi-pagination==0.12.34
 gunicorn==23.0.0
 httpx==0.28.1
-passlib==1.7.4
 psycopg2==2.9.10
 pydantic==2.10.6
 python-jose==3.4.0

@@ -20,7 +20,7 @@ services:
         condition: service_healthy
     environment:
       # App config
-      APP_VERSION: "0.3.6"
+      APP_VERSION: "0.3.7"
       ENVIRONMENT: "dev"
       # Security
       ADMIN_TOKEN: "test1234"

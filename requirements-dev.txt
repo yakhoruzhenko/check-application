@@ -11,6 +11,5 @@ pytest-env==1.1.1
 pytest_mock==3.12.0
 sqlalchemy[mypy]==2.0.38
 sqlalchemy_schemadisplay==2.0
-types-passlib==1.7.7.20241221
 types-python-jose==3.4.0.20250224
 yamllint==1.35.1
