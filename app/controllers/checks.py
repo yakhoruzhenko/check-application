@@ -43,13 +43,13 @@ def get_own_checks(db: Session = Depends(get_db),
                    current_user: User = Depends(get_current_user),
                    pagination_params: Params = Depends(),
                    period_start: date = Query(None, description='Filter by check creation date start (included)',
-                                              example='2025-02-14'),
+                                              examples=['2025-02-14']),
                    period_end: date = Query(None, description='Filter by check creation date end (included)',
-                                            example='2025-04-15'),
+                                            examples=['2025-04-15']),
                    total_amount_ge: Decimal = Query(None, description='Filter by total amount (greater or equal)',
-                                                    example='149.99'),
+                                                    examples=['149.99']),
                    total_amount_le: Decimal = Query(None, description='Filter by total amount (less or equal)',
-                                                    example='500.00'),
+                                                    examples=['500.00']),
 
                    payment_method: PaymentMethod = Query(None, description='Filter by payment method')
                    ) -> Page[check.CheckResponse]:

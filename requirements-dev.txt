@@ -1,17 +1,16 @@
 -r requirements.txt
 
-sqlalchemy[mypy]==2.0.23
-httpx==0.25.1
-types-passlib==1.7.7.13
-types-python-jose==3.3.4.8
+bandit==1.8.3
+coverage==7.6.12
 flake8==7.1.2
 isort==6.0.0
 mypy==1.15.0
-coverage==7.6.12
 pytest==8.3.4
 pytest-cov==6.0.0
 pytest-env==1.1.1
 pytest_mock==3.12.0
+sqlalchemy[mypy]==2.0.38
 sqlalchemy_schemadisplay==2.0
+types-passlib==1.7.7.20241221
+types-python-jose==3.4.0.20250224
 yamllint==1.35.1
-bandit==1.8.3
