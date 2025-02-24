@@ -43,6 +43,8 @@ jobs:
   push-image:
     name: Build & Push Docker Image
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     needs: ci-checks
     if: |
       github.event_name == 'release' &&
@@ -64,9 +66,9 @@ jobs:
           docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
       - name: Build Docker Image
         run: |
-          VERSION_TAG=${{ github.event.release.tag_name }}
-          docker build -f Dockerfile.prod -t yarusx/check-app:$VERSION_TAG .
-          docker tag yarusx/check-app:$VERSION_TAG yarusx/check-app:latest
+          IMAGE_TAG=${GITHUB_REF#refs/tags/v}
+          docker build -f Dockerfile.prod -t yarusx/check-app:$IMAGE_TAG .
+          docker tag yarusx/check-app:$IMAGE_TAG yarusx/check-app:latest
       - name: Push Docker Image
         run: |
           IMAGE_TAG=${GITHUB_REF#refs/tags/v}
