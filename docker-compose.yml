@@ -20,7 +20,7 @@ services:
         condition: service_healthy
     environment:
       # App config
-      APP_VERSION: "0.3.7"
+      APP_VERSION: "0.3.8"
       ENVIRONMENT: "dev"
       # Security
       ADMIN_TOKEN: "test1234"
@@ -103,8 +103,11 @@ services:
       POSTGRES_DB: "check_app"
       POSTGRES_USER: "check"
       POSTGRES_PASSWORD: "password"
+      # PGUSER and PGDATABASE are environment variables used by psql itself, hence required for the healcheck test
+      PGUSER: "check"
+      PGDATABASE: "check_app"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U user -d mydb"]
+      test: ["CMD-SHELL", "pg_isready"]
       interval: 5s
       retries: 5
       start_period: 10s
